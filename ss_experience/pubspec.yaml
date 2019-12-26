@@ -1,0 +1,12 @@
+name: ss_experience
+dependencies:
+  react: ^5.1.0
+  over_react: ^3.1.0
+dev_dependencies:
+  build_runner:
+  build_test:
+  build_web_compilers:
+
+dependency_overrides:
+  micro_sdk:
+    path: ../micro_sdk
