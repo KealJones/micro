@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
+import 'package:shared_events/shared_events.dart';
 
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
@@ -21,8 +22,8 @@ class ShellExperienceManager {
     });
   }
 
-  void _handleAddExperience(event) {
-    addExperience(event.detail['experience']);
+  void _handleAddExperience(ShellExperienceRequestedEvent event) {
+    addExperience(event.experience);
   }
 
   Future addExperience(String experience) async {
@@ -34,14 +35,14 @@ class ShellExperienceManager {
       asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
 
-    document.body.append(new Element.tag(experienceMeta.tag));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(regionName: 'AppRegion', newContent: Element.tag(experienceMeta.tag)));
   }
 
   void disposeEventHandlers() {
-    MicroSdk.ignore(MicroSdk.ShellExperienceRequstedEvent(), _handleAddExperience);
+    MicroSdk.ignore(ShellExperienceRequestedEvent(), _handleAddExperience);
   }
 
   void initializeEventHandlers() {
-    MicroSdk.listen(MicroSdk.ShellExperienceRequstedEvent(), _handleAddExperience);
+    MicroSdk.listen(ShellExperienceRequestedEvent(), _handleAddExperience);
   }
 }

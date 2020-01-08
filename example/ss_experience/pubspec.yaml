@@ -10,3 +10,5 @@ dev_dependencies:
 dependency_overrides:
   micro_sdk:
     path: ../../
+  shared_events:
+    path: ../shared_events/

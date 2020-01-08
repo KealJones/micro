@@ -6,3 +6,6 @@
 packages
 .packages
 build
+.dart_tool
+example/cdn/docs-experience/latest/
+example/cdn/ss-experience/latest/

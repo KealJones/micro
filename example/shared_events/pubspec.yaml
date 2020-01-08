@@ -1,0 +1,7 @@
+name: shared_events
+version: 0.0.1
+dependencies:
+  micro_sdk: any
+dependency_overrides:
+  micro_sdk:
+    path: ../../

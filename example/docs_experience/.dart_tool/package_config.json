@@ -398,6 +398,12 @@
       "languageVersion": "2.3"
     },
     {
+      "name": "shared_events",
+      "rootUri": "../../shared_events",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "shelf",
       "rootUri": "file:///Users/kealjones/.pub-cache/hosted/pub.dartlang.org/shelf-0.7.5",
       "packageUri": "lib/",
@@ -560,7 +566,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-01-07T15:55:44.259039Z",
+  "generated": "2020-01-07T23:42:30.053153Z",
   "generator": "pub",
   "generatorVersion": "2.7.0"
 }

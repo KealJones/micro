@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:over_react/over_react.dart';
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
+import 'package:shared_events/shared_events.dart';
 
 part 'ss_experience_app.over_react.g.dart';
 
@@ -27,7 +28,7 @@ class SSExperienceAppComponent extends UiStatefulComponent2<SSExperienceAppProps
 
   render() {
     return Dom.div()(
-      (Dom.h4()..style = {'margin': 0})('Spreadsheets: Using over_react 3.1.0-wip & Component2'),
+      (Dom.h4()..style = {'margin': 0})('Spreadsheets: Using over_react 3.1.0 & Component2'),
       Dom.p()('Counter: ' + state.counter.toString()),
       Dom.div()(
         (Dom.button()
@@ -41,8 +42,7 @@ class SSExperienceAppComponent extends UiStatefulComponent2<SSExperienceAppProps
         ..onSubmit = (e) {
           e.stopPropagation();
           e.preventDefault();
-          window.console.log('test');
-          MicroSdk.dispatch(MicroSdk.ShellPostMessageEvent(_postMessageInput.current.value));
+          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.current.value));
         }
       )(
         (Dom.label()

@@ -329,7 +329,7 @@ packages:
       path: "../.."
       relative: true
     source: path
-    version: "1.0.0"
+    version: "0.0.1"
   mime:
     dependency: transitive
     description:
@@ -477,6 +477,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4+1"
+  shared_events:
+    dependency: "direct overridden"
+    description:
+      path: "../shared_events"
+      relative: true
+    source: path
+    version: "0.0.1"
   shelf:
     dependency: transitive
     description:
