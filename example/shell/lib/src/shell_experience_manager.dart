@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:shared_events/shared_events.dart';
+import 'package:shell/src/shell_regions.dart';
 
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
@@ -35,7 +36,8 @@ class ShellExperienceManager {
       asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
 
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(regionName: 'AppRegion', newContent: Element.tag(experienceMeta.tag)));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(experienceMeta.tag + '-sidebar')));
   }
 
   void disposeEventHandlers() {

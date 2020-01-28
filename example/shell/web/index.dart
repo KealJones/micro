@@ -10,7 +10,6 @@ import 'package:shell/src/shell_app.dart';
 
 void main() {
   setClientConfiguration();
-  defineMicroElement('app-region', (e) => AppRegion(e));
 
   react.render(ShellApp()(), document.querySelector('#shellApp'));
 }

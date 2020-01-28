@@ -8,7 +8,7 @@ import 'package:js/js.dart';
 @JS('Function')
 external JSFunction(String arg1, String arg2, String functionBody);
 
-Function(String, Function(ShadowRoot)) _createMicroElement = JSFunction('name', 'construct', '''
+Function(String, Function(ShadowRoot)) _defineCustomElement = JSFunction('name', 'construct', '''
   customElements.define(name, class extends HTMLElement {
     constructor() {
       super();
@@ -18,6 +18,18 @@ Function(String, Function(ShadowRoot)) _createMicroElement = JSFunction('name', 
   });
 ''');
 
-defineMicroElement(String elementName, Function(ShadowRoot shadowRoot) appFactory) {
-  return _createMicroElement(elementName, allowInterop(appFactory));
+MicroElement defineMicroElement(String tag, MicroElementConstructor elementConstructor) {
+  return MicroElement(tag: tag, constructor: elementConstructor);
+}
+
+typedef void MicroElementConstructor(ShadowRoot shadowRoot);
+
+class MicroElement {
+  final String tag;
+  final String name;
+  Node root;
+
+  MicroElement({this.tag, this.name, this.root, MicroElementConstructor constructor}){
+    _defineCustomElement(tag, allowInterop(constructor));
+  }
 }

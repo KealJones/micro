@@ -39,6 +39,7 @@ class MicroSdkEvent implements CustomEvent, Event {
   CustomEvent jsEvent;
 
   get detail => jsEvent.detail;
+  get via => moduleName;
 
   MicroSdkEvent from(event) {
     this.jsEvent = event;
@@ -102,3 +103,21 @@ class MicroSdkEvent implements CustomEvent, Event {
 }
 
 eventType(module, type) => (module != null ? module + ':' : '') + type;
+var _moduleName;
+String get moduleName => _moduleName;
+setModule(name) {
+  _moduleName = name;
+  print('set moduleName to $name');
+}
+
+dispatch(MicroSdkEvent event, {target}) {
+  (target ?? window).dispatchEvent(event.jsEvent);
+}
+
+listen(MicroSdkEvent event, Function handler, {target}) {
+  (target ?? window).addEventListener(event.type, allowInterop((_event) => handler(event.from(_event))));
+}
+
+ignore(MicroSdkEvent event, Function handler, {target}) {
+  (target ?? window).removeEventListener(event.type, allowInterop((_event) => handler(event.from(_event))));
+}

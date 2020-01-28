@@ -6,6 +6,7 @@ import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:react/react_client/react_interop.dart';
 
 import 'package:shared_events/shared_events.dart';
+import 'package:shell/src/shell_regions.dart';
 
 import './shell_experience.dart';
 import './shell_experience_manager.dart';
@@ -73,31 +74,47 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
     }
   }
 
-  ReactElement _regionOutput() {
-    return React.createElement('app-region', jsify({}));
+  ReactElement _appRegion() {
+    return React.createElement(ShellRegions.app.tag, jsify({}));
+  }
+
+  ReactElement _sidebarRegion() {
+    return React.createElement(ShellRegions.sidebar.tag, jsify({}));
   }
 
   render() {
-    return (Dom.div()..className = 'shell')(
-      Dom.h2()('Using over_react 3.1.0-wip'),
-      _renderShellControls(),
-      _renderMessagesBox(),
-      _regionOutput(),
+    return Fragment()(
+      Dom.header()(
+        Dom.h2()('Shell: Using over_react 3.1.0-wip'),
+        _renderShellControls(),
+        _renderMessagesBox(),
+        Dom.nav()(
+          'Toolbar.'
+        ),
+      ),
+      (Dom.div()..className="body")(
+        (Dom.main()..className = "content")(
+          _appRegion(),
+        ),
+        Dom.aside()(
+          _sidebarRegion(),
+        ),
+      ),
+      Dom.footer()(),
     );
   }
 
   void _handlePostMessage(ShellPostMessageEvent event) {
     var messages = new List.from(state.messages);
-    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.target}:';
+    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.via}:';
 
     messages.add('${new DateTime.now().toString()} - ${postBy} ${event.message}');
     setState(newState()..messages = messages);
   }
 
   void _handleToggleMessages(event) {
-    var toggledBy = (event.target is ButtonElement) ? 'shell' : event.target;
     MicroSdk.dispatch(ShellPostMessageEvent(
-      'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${toggledBy}'
+      'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${event.via}'
     ));
 
     setState(newState()..showMessages = !state.showMessages);
@@ -145,13 +162,5 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
         }
       )('Toggle Messages')
     );
-  }
-}
-
-class AppRegion extends MicroSdk.MicroRegion {
-  Element node;
-
-  AppRegion(ShadowRoot shadowRoot):super(name:'AppRegion') {
-    shadowRoot.append(node);
   }
 }
