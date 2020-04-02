@@ -1,0 +1,25 @@
+targets:
+  $default:
+    sources:
+      include:
+        - "lib/**"
+        - "web/**"
+    builders:
+      build_web_compilers|entrypoint:
+        release_options:
+          dart2js_args:
+            - -O3
+            - --csp
+            - --no-minify
+      reactor:_reactorLocalGenerator:
+        enabled: false
+
+# Hack-y solution for source maps pending more permanent solution:
+# https://github.com/dart-lang/build/issues/1779
+global_options:
+  build_web_compilers|dart_source_cleanup:
+    release_options:
+      enabled: false
+  build_web_compilers|dart2js_archive_extractor:
+    release_options:
+      filter_outputs: false

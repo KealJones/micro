@@ -7,8 +7,11 @@ class ShellExperience {
 
   static const ShellExperience SPREADSHEETS = const ShellExperience._('ss');
 
+  static const ShellExperience REACTOR = const ShellExperience._('reactor');
+
   static const List<ShellExperience> experiences = const <ShellExperience>[
     DOCS,
-    SPREADSHEETS
+    SPREADSHEETS,
+    REACTOR,
   ];
 }

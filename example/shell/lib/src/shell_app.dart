@@ -156,6 +156,9 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
       (Dom.button()..onClick = (event) {
         MicroSdk.dispatch(ShellExperienceRequestedEvent(ShellExperience.SPREADSHEETS.prefix));
       })('New Spreadsheets Experience'),
+      (Dom.button()..onClick = (event) {
+        MicroSdk.dispatch(ShellExperienceRequestedEvent(ShellExperience.REACTOR.prefix));
+      })('New Reactor Experience'),
       (Dom.button()
         ..onClick = (event) {
           MicroSdk.dispatch(ShellToggleMessagesEvent());
