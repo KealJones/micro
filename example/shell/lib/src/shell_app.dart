@@ -85,7 +85,7 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
   render() {
     return Fragment()(
       Dom.header()(
-        Dom.h2()('Shell: Using over_react 3.1.0-wip'),
+        Dom.h2()('Shell: Using over_react ^3.1.0'),
         _renderShellControls(),
         _renderMessagesBox(),
         Dom.nav()(
@@ -150,14 +150,14 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          MicroSdk.dispatch(ShellExperienceRequestedEvent(ShellExperience.DOCS.prefix));
+          MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.DOCS.prefix));
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        MicroSdk.dispatch(ShellExperienceRequestedEvent(ShellExperience.SPREADSHEETS.prefix));
+        MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.SPREADSHEETS.prefix, attributes: {'test':true}));
       })('New Spreadsheets Experience'),
       (Dom.button()..onClick = (event) {
-        MicroSdk.dispatch(ShellExperienceRequestedEvent(ShellExperience.REACTOR.prefix));
+        MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.REACTOR.prefix, attributes: {'test':true}));
       })('New Reactor Experience'),
       (Dom.button()
         ..onClick = (event) {

@@ -11,6 +11,7 @@ UiFactory<DocsExperienceAppProps> DocsExperienceApp = _$DocsExperienceApp;
 
 @Props()
 class _$DocsExperienceAppProps extends UiProps {
+  bool test;
 }
 
 @State()

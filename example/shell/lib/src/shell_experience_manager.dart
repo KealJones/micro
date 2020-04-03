@@ -24,10 +24,10 @@ class ShellExperienceManager {
   }
 
   void _handleAddExperience(ShellExperienceRequestedEvent event) {
-    addExperience(event.experience);
+    addExperience(event.experience, attributes: event.attributes);
   }
 
-  Future addExperience(String experience) async {
+  Future addExperience(String experience, {Map attributes = const {}}) async {
     var experienceMeta = _registeredExperiences[experience];
 
     if(!experienceMeta.isLoaded) {
@@ -40,8 +40,8 @@ class ShellExperienceManager {
     // if (experienceMeta.tag == 'docs-experience'){
     //   sidebarTag = 'ss-experience-sidebar';
     // }
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)));
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(sidebarTag)));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)..attributes = attributes));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(sidebarTag)..attributes = attributes));
   }
 
   void disposeEventHandlers() {

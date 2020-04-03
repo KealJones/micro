@@ -7,11 +7,9 @@ import 'docs_experience_app.dart';
 
 
 class DocsExperience {
-  final ShadowRoot root;
-
-  DocsExperience(this.root) {
+  DocsExperience(ShadowRoot root) {
     setClientConfiguration();
     MicroSdk.setModule('Docs');
-    react.render(DocsExperienceApp()(), root);
+    react.render((DocsExperienceApp()..addProps(root.host.attributes))(), root);
   }
 }

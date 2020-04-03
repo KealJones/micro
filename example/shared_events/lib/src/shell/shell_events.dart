@@ -21,9 +21,11 @@ class ShellPostMessageEvent extends ShellMicroSdkEvent {
 }
 
 class ShellExperienceRequestedEvent extends ShellMicroSdkEvent {
-  ShellExperienceRequestedEvent([experience]):super(type:_EventTypeConstants.EXPERIENCE_REQUESTED, detail: {'experience': experience});
+  ShellExperienceRequestedEvent({experience, attributes = const {}}):super(type:_EventTypeConstants.EXPERIENCE_REQUESTED, detail: {'experience': experience, 'attributes': attributes});
 
   String get experience => detail['experience'];
+
+  Map get attributes => detail['attributes'];
 }
 
 class ShellToggleMessagesEvent extends ShellMicroSdkEvent {

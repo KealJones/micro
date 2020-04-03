@@ -19,14 +19,15 @@ REACTOR=$!
 
 PYTHON_VERSION_STRING="$(python -c 'import sys; print(".".join(map(str, sys.version_info[:1])))')"
 if [ "$PYTHON_VERSION_STRING" = "2" ]; then
-  (cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/cdn" && python -m SimpleHTTPServer 9000) &
+  (cd cdn && python -m SimpleHTTPServer 9000) &
   LOCALCDN=$!
 else
-  (cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/cdn" && python -m http.server 9000) &
+  (cd cdn && python -m http.server 9000) &
   LOCALCDN=$!
 fi
 
 (cd shell && pub get && webdev serve -r -- --delete-conflicting-outputs) &
 FINALSERVE=$!
 
-wait
+echo "$LOCALCDN $FINALSERVE"
+wait "$FINALSERVE"
