@@ -8,6 +8,7 @@ _term() {
 }
 
 trap _term SIGTERM
+trap _term SIGINT
 
 (cd docs_experience && pub get && pub run build_runner watch -o ../cdn/docs-experience/latest/ -r) &
 DOCS=$!
@@ -15,8 +16,17 @@ DOCS=$!
 SS=$!
 (cd reactor_experience && pub get && pub run build_runner watch -o ../cdn/reactor-experience/latest/ -r) &
 REACTOR=$!
-(cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/cdn" && python -m http.server 9000) &
-LOCALCDN=$!
+
+PYTHON_VERSION_STRING="$(python -c 'import sys; print(".".join(map(str, sys.version_info[:1])))')"
+if [ "$PYTHON_VERSION_STRING" = "2" ]; then
+  (cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/cdn" && python -m SimpleHTTPServer 9000) &
+  LOCALCDN=$!
+else
+  (cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/cdn" && python -m http.server 9000) &
+  LOCALCDN=$!
+fi
+
 (cd shell && pub get && webdev serve -r -- --delete-conflicting-outputs) &
 FINALSERVE=$!
-wait "$FINALSERVE"
+
+wait

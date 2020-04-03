@@ -38,11 +38,12 @@ class CustomEventInit {
 class MicroSdkEvent implements CustomEvent, Event {
   CustomEvent jsEvent;
 
-  get detail => jsEvent.detail;
-  get via => moduleName;
+  get detail => jsEvent.detail['payload'];
+  get via => jsEvent.detail['via'];
 
   MicroSdkEvent from(event) {
     this.jsEvent = event;
+    window.console.log(event);
     return this;
   }
 
@@ -56,7 +57,7 @@ class MicroSdkEvent implements CustomEvent, Event {
   List<EventTarget> get path => jsEvent.composedPath != null ? composedPath() : [];
 
   MicroSdkEvent({type, module, detail = const {}}) {
-    this.jsEvent = createJsCustomEvent(eventType(module, type), detail: detail);
+    this.jsEvent = createJsCustomEvent(eventType(module, type), detail: {'payload': detail, 'via': moduleName});
   }
 
   @override
@@ -103,14 +104,17 @@ class MicroSdkEvent implements CustomEvent, Event {
 }
 
 eventType(module, type) => (module != null ? module + ':' : '') + type;
+
 var _moduleName;
 String get moduleName => _moduleName;
-setModule(name) {
+setModule(String name) {
+//print(StackTrace.current);
   _moduleName = name;
   print('set moduleName to $name');
 }
 
 dispatch(MicroSdkEvent event, {target}) {
+
   (target ?? window).dispatchEvent(event.jsEvent);
 }
 

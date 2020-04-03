@@ -106,7 +106,7 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
 
   void _handlePostMessage(ShellPostMessageEvent event) {
     var messages = new List.from(state.messages);
-    var postBy = (event.target == findDomNode(this)) ? '' : 'Message posted from ${event.via}:';
+    var postBy = 'Message posted from ${event.via ?? 'shell'}:';
 
     messages.add('${new DateTime.now().toString()} - ${postBy} ${event.message}');
     setState(newState()..messages = messages);

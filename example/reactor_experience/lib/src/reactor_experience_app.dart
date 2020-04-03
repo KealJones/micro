@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:reactor/reactor.dart';
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
@@ -17,7 +18,7 @@ class ReactorExperienceAppState extends State implements ReactorExperienceAppSta
 
 @ReactorComponent()
 class ReactorExperienceAppComponent extends Component<Props, ReactorExperienceAppState>  {
-  var _postMessageInput;
+  InputElement _postMessageInput;
 
   get initialState => (ReactorExperienceAppState()
     ..counter = 0
@@ -35,32 +36,27 @@ class ReactorExperienceAppComponent extends Component<Props, ReactorExperienceAp
           ..onClick = (event) => setState(ReactorExperienceAppState()..counter = --state.counter)
         )('Decrement')
       ),
-      (Dom.form()
-        ..onSubmit = (e) {
-          e.stopPropagation();
-          e.preventDefault();
-          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
+      (Dom.label()
+        ..htmlFor = 'shellMessage'
+        ..style = {
+          'display': 'block',
+          'margin': '.8rem 0 .2rem 0'
         }
-      )(
-        (Dom.label()
-          ..htmlFor = 'shellMessage'
-          ..style = {
-            'display': 'block',
-            'margin': '.8rem 0 .2rem 0'
-          }
-        )('Message'),
-        (Dom.input()
-          ..type = 'text'
-          ..id = 'shellMessage'
-          ..ref = (ref) => _postMessageInput = ref
-        )(),
-        (Dom.button()
-          ..type = 'submit'
-          ..style = {
-            'margin': '0 .2rem'
-          }
-        )('Post Message')
-      )
+      )('Message'),
+      (Dom.input()
+        ..type = 'text'
+        ..id = 'shellMessage'
+        ..ref = allowInterop((ref) { _postMessageInput = ref; })
+      )(),
+      (Dom.button()
+        ..style = {
+          'margin': '0 .2rem'
+        }
+        ..onClick = (e) {
+          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
+          return false;
+        }
+      )('Post Message')
     );
   }
 }

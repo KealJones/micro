@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:reactor/reactor.dart';
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
@@ -36,32 +37,27 @@ class ReactorExperienceSidebarComponent extends Component<Props, ReactorExperien
           ..onClick = (event) => setState(ReactorExperienceSidebarState()..counter = --state.counter)
         )('Decrement')
       ),
-      (Dom.form()
-        ..onSubmit = (e) {
-          e.stopPropagation();
-          e.preventDefault();
-          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
+      (Dom.label()
+        ..htmlFor = 'shellMessage'
+        ..style = {
+          'display': 'block',
+          'margin': '.8rem 0 .2rem 0'
         }
-      )(
-        (Dom.label()
-          ..htmlFor = 'shellMessage'
-          ..style = {
-            'display': 'block',
-            'margin': '.8rem 0 .2rem 0'
-          }
-        )('Message'),
-        (Dom.input()
-          ..type = 'text'
-          ..id = 'shellMessage'
-          ..ref = (ref) { _postMessageInput = ref; }
-        )(),
-        (Dom.button()
-          ..type = 'submit'
-          ..style = {
-            'margin': '0 .2rem'
-          }
-        )('Post Message')
-      )
+      )('Message'),
+      (Dom.input()
+        ..type = 'text'
+        ..id = 'shellMessage'
+        ..ref = allowInterop((ref) { _postMessageInput = ref; })
+      )(),
+      (Dom.button()
+        ..onClick = (e) {
+          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
+          return false;
+        }
+        ..style = {
+          'margin': '0 .2rem'
+        }
+      )('Post Message')
     );
   }
 }

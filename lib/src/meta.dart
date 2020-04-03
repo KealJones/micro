@@ -9,7 +9,7 @@ class MicroContainerMeta {
   static const SCRIPT_NAME = 'index.dart.js';
   static const TAG_POSTFIX = '-experience';
 
-  ShellExperienceMeta(this.shellExperience) {
+  MicroContainerMeta(this.shellExperience) {
     prefix = shellExperience.prefix;
     tag = '${prefix}${TAG_POSTFIX}';
     source = 'http://${CDN_URL}/${tag}/${RELEASE_DIR}/${SCRIPT_NAME}';
@@ -19,7 +19,7 @@ class MicroContainerMeta {
 
   String prefix;
 
-  ShellExperience shellExperience;
+  dynamic shellExperience;
 
   String source;
 

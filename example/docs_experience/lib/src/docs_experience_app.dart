@@ -40,6 +40,7 @@ class DocsExperienceAppComponent extends UiStatefulComponent<DocsExperienceAppPr
         (Dom.button()
           ..onClick = (event) {
             MicroSdk.dispatch(ShellToggleMessagesEvent());
+            return false;
           }
           ..ref = (ref) {
             _toggleMessagesButton = ref;

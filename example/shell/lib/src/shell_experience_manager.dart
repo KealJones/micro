@@ -36,8 +36,12 @@ class ShellExperienceManager {
       asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
 
+    var sidebarTag = experienceMeta.tag + '-sidebar';
+    // if (experienceMeta.tag == 'docs-experience'){
+    //   sidebarTag = 'ss-experience-sidebar';
+    // }
     MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)));
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(experienceMeta.tag + '-sidebar')));
+    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(sidebarTag)));
   }
 
   void disposeEventHandlers() {
