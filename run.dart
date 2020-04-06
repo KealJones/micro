@@ -12,7 +12,7 @@ main(args) async {
   ProcessSignal.sigint.watch().listen((ProcessSignal signal) {
     print("exiting");
     backgroundProcesses.forEach((process){
-      process.kill(ProcessSignal.sigkill);
+      process.kill();
     });
     exit(0);
   });
@@ -32,7 +32,7 @@ main(args) async {
 
   // Start the build watchers
   for(var experiencePath in experiencePaths) {
-    runExperienceBuildWatcher(experiencePath);
+    backgroundProcesses.add(await runExperienceBuildWatcher(experiencePath));
   }
 
   // Start Static Handler
