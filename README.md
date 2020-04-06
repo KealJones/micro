@@ -1,6 +1,6 @@
 # Dart Microfrontend Example app
 
-This repo brings multiple other repos into a single easy to run local microfrontend experience, if you want more control and to play around with stuff take a look at https://github.com/kealjones-wk/shell.
+This repo brings multiple other repos into a single easy to run local microfrontends experience.
 
 ## Getting Started
 From the root of this repo run `pub get` then to run the entire example run `dart ./run.dart`.
