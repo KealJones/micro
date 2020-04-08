@@ -1,19 +1,20 @@
 import 'dart:html';
+import 'dart:js';
 
 import 'package:reactor/reactor.dart';
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 
+import 'micro.dart';
 import 'reactor_experience_app.dart';
 import 'reactor_experience_sidebar.dart';
 
 class ReactorExperience {
   ReactorExperience(ShadowRoot root) {
-    MicroSdk.setModule('Reactor');
+    setupMicro(root);
     ReactDOM.render((ReactorExperienceApp()..addAll(root.host.attributes))(), root);
   }
 
   ReactorExperience.sidebar(ShadowRoot root) {
-    MicroSdk.setModule('Reactor');
+    setupMicroSidebar(root);
     ReactDOM.render((ReactorExperienceSidebar()..addAll(root.host.attributes))(), root);
   }
 }

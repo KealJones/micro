@@ -1,7 +1,7 @@
 import 'dart:html';
 
+import 'package:docs_experience/src/micro.dart';
 import 'package:over_react/over_react.dart';
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:shared_events/shared_events.dart';
 
 part 'docs_experience_app.over_react.g.dart';
@@ -40,7 +40,7 @@ class DocsExperienceAppComponent extends UiStatefulComponent<DocsExperienceAppPr
         Dom.p()('Shell Operations'),
         (Dom.button()
           ..onClick = (event) {
-            MicroSdk.dispatch(ShellToggleMessagesEvent());
+            micro.dispatch(ShellToggleMessagesEvent());
             return false;
           }
           ..ref = (ref) {

@@ -11,12 +11,11 @@ class _EventTypeConstants {
 }
 
 class ShellMicroSdkEvent extends MicroSdkEvent {
-  ShellMicroSdkEvent({type, detail}):super(module: _EventTypeConstants.MODULE_NAME, type: type, detail:detail);
+  ShellMicroSdkEvent({type, detail}):super(type: '${_EventTypeConstants.MODULE_NAME}:$type', detail:detail);
 }
 
 class ShellPostMessageEvent extends ShellMicroSdkEvent {
-  ShellPostMessageEvent([message]):super(type: _EventTypeConstants.POST_MESSAGE, detail: {'message': message});
-
+  ShellPostMessageEvent([message = '']):super(type: _EventTypeConstants.POST_MESSAGE, detail: {'message': message});
   String get message => detail['message'];
 }
 

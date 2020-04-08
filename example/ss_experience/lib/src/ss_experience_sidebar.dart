@@ -4,6 +4,8 @@ import 'package:over_react/over_react.dart';
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:shared_events/shared_events.dart';
 
+import 'micro.dart';
+
 part 'ss_experience_sidebar.over_react.g.dart';
 
 @Factory()
@@ -42,7 +44,7 @@ class SSExperienceSidebarComponent extends UiStatefulComponent2<SSExperienceSide
         ..onSubmit = (e) {
           e.stopPropagation();
           e.preventDefault();
-          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.current.value));
+          micro.dispatch(ShellPostMessageEvent(_postMessageInput.current.value));
         }
       )(
         (Dom.label()

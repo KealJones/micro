@@ -2,12 +2,11 @@ import 'dart:html';
 import 'dart:js_util';
 
 import 'package:over_react/over_react.dart';
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:react/react_client/react_interop.dart';
-
 import 'package:shared_events/shared_events.dart';
-import 'package:shell/src/shell_regions.dart';
 
+import './shell_regions.dart';
+import './micro.dart';
 import './shell_experience.dart';
 import './shell_experience_manager.dart';
 
@@ -52,8 +51,8 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
     _shellExperienceManager = new ShellExperienceManager();
     _shellExperienceManager.initializeEventHandlers();
 
-    MicroSdk.listen(ShellPostMessageEvent(), _handlePostMessage);
-    MicroSdk.listen(ShellToggleMessagesEvent(), _handleToggleMessages);
+    micro.listen(ShellPostMessageEvent(), _handlePostMessage);
+    micro.listen(ShellToggleMessagesEvent(), _handleToggleMessages);
   }
 
   @override
@@ -62,8 +61,8 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
 
     _shellExperienceManager.disposeEventHandlers();
 
-    MicroSdk.ignore(ShellPostMessageEvent(), _handlePostMessage);
-    MicroSdk.ignore(ShellToggleMessagesEvent(), _handleToggleMessages);
+    micro.ignore(ShellPostMessageEvent(), _handlePostMessage);
+    micro.ignore(ShellToggleMessagesEvent(), _handleToggleMessages);
   }
 
   @override
@@ -113,7 +112,7 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
   }
 
   void _handleToggleMessages(event) {
-    MicroSdk.dispatch(ShellPostMessageEvent(
+    micro.dispatch(ShellPostMessageEvent(
       'Message panel ${state.showMessages ? 'disabled' : 'enabled'} by ${event.via}'
     ));
 
@@ -150,18 +149,18 @@ class ShellAppComponent extends UiStatefulComponent2<ShellAppProps, ShellAppStat
     return (Dom.div()..className = 'shell__controls')(
       (Dom.button()
         ..onClick = (event) {
-          MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.DOCS.prefix));
+          micro.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.DOCS.prefix));
         }
       )('New Docs Experience'),
       (Dom.button()..onClick = (event) {
-        MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.SPREADSHEETS.prefix, attributes: {'test':true}));
+        micro.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.SPREADSHEETS.prefix, attributes: {'test':true}));
       })('New Spreadsheets Experience'),
       (Dom.button()..onClick = (event) {
-        MicroSdk.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.REACTOR.prefix, attributes: {'test':true}));
+        micro.dispatch(ShellExperienceRequestedEvent(experience: ShellExperience.REACTOR.prefix, attributes: {'test':true}));
       })('New Reactor Experience'),
       (Dom.button()
         ..onClick = (event) {
-          MicroSdk.dispatch(ShellToggleMessagesEvent());
+          micro.dispatch(ShellToggleMessagesEvent());
         }
       )('Toggle Messages')
     );

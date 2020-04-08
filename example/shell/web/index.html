@@ -58,14 +58,17 @@ body .body aside {
 }
     </style>
 
+<script src="packages/react/react.js"></script>
+<script src="packages/react/react_dom.js"></script>
+<script>
+  window.ReactDom = ReactDOM;
+</script>
   </head>
 
   <body>
 
     <div id="shellApp"></div>
 
-    <script src="packages/react/react.js"></script>
-    <script src="packages/react/react_dom.js"></script>
     <script defer src="index.dart.js"></script>
 
     <!-- Experience Custom Elements -->

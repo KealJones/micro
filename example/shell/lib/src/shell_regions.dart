@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 
 class _ShellRegions {

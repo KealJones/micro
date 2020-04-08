@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:html';
 
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:shared_events/shared_events.dart';
 import 'package:shell/src/shell_regions.dart';
 
 import './shell_experience.dart';
 import './shell_experience_meta.dart';
+import 'package:micro_sdk/micro_sdk.dart';
+import 'micro.dart';
 
 class ShellExperienceManager {
   static final ShellExperienceManager _instance = new ShellExperienceManager._internal();
@@ -31,24 +32,21 @@ class ShellExperienceManager {
     var experienceMeta = _registeredExperiences[experience];
 
     if(!experienceMeta.isLoaded) {
-      var asyncExperienceLoader = MicroSdk.AsyncScriptLoader(experienceMeta.source);
+      var asyncExperienceLoader = AsyncScriptLoader(experienceMeta.source);
       var asyncExperienceLoaderOnLoad = asyncExperienceLoader.loadScript();
       asyncExperienceLoaderOnLoad.whenComplete(await () => experienceMeta.isLoaded = true);
     }
 
     var sidebarTag = experienceMeta.tag + '-sidebar';
-    // if (experienceMeta.tag == 'docs-experience'){
-    //   sidebarTag = 'ss-experience-sidebar';
-    // }
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)..attributes = attributes));
-    MicroSdk.dispatch(MicroSdk.MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(sidebarTag)..attributes = attributes));
+    ShellRegions.app.root.dispatchEvent(MicroRegionUpdateEvent(region: ShellRegions.app, newContent: Element.tag(experienceMeta.tag)..attributes = attributes).jsEvent);
+    ShellRegions.sidebar.root.dispatchEvent(MicroRegionUpdateEvent(region: ShellRegions.sidebar, newContent: Element.tag(sidebarTag)..attributes = attributes).jsEvent);
   }
 
   void disposeEventHandlers() {
-    MicroSdk.ignore(ShellExperienceRequestedEvent(), _handleAddExperience);
+    micro.ignore(ShellExperienceRequestedEvent(), _handleAddExperience);
   }
 
   void initializeEventHandlers() {
-    MicroSdk.listen(ShellExperienceRequestedEvent(), _handleAddExperience);
+    micro.listen(ShellExperienceRequestedEvent(), _handleAddExperience);
   }
 }

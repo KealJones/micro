@@ -63,5 +63,10 @@ Future<ProcessResult> runPubGet(String path) {
 Future<Process> runExperienceBuildWatcher(String experiencePath) async {
   var experienceName = experiencePath.replaceAll('example/', '');
   print('Running build_runner watch for $experienceName');
-  return Process.start('pub', ['run', 'build_runner', 'watch', '-o', '../cdn/${experienceName.replaceAll('_', '-')}/latest/', '-r'], workingDirectory: experiencePath);
+  return Process.start('pub', ['run', 'build_runner', 'watch', '-o', '../cdn/${experienceName.replaceAll('_', '-')}/latest/', '-r'], workingDirectory: experiencePath).then((process) {
+    process.stdout
+        .transform(utf8.decoder)
+        .listen((data) { print(data); });
+        return process;
+  });
 }

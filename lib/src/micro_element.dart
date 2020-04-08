@@ -18,7 +18,7 @@ Function(String, Function(ShadowRoot)) _defineCustomElement = JSFunction('name',
   });
 ''');
 
-MicroElement defineMicroElement(String tag, MicroElementConstructor elementConstructor) {
+MicroElement defineMicroElement(String tag, [MicroElementConstructor elementConstructor]) {
   return MicroElement(tag: tag, constructor: elementConstructor);
 }
 
@@ -26,10 +26,9 @@ typedef void MicroElementConstructor(ShadowRoot shadowRoot);
 
 class MicroElement {
   final String tag;
-  final String name;
   Node root;
 
-  MicroElement({this.tag, this.name, this.root, MicroElementConstructor constructor}){
-    _defineCustomElement(tag, allowInterop(constructor));
+  MicroElement({this.tag, MicroElementConstructor constructor}){
+    _defineCustomElement(tag, allowInterop((r) {root = r; return constructor(r);}));
   }
 }

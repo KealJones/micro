@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:js';
 
 import 'package:reactor/reactor.dart';
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
+import 'micro.dart';
 import 'package:shared_events/shared_events.dart';
 
 part 'reactor_experience_sidebar.reactor.g.dart';
@@ -51,7 +51,7 @@ class ReactorExperienceSidebarComponent extends Component<Props, ReactorExperien
       )(),
       (Dom.button()
         ..onClick = (e) {
-          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
+          micro_sidebar.dispatch(ShellPostMessageEvent(_postMessageInput.value), useGlobal: true);
           return false;
         }
         ..style = {

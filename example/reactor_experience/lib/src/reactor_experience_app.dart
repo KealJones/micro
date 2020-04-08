@@ -2,9 +2,9 @@ import 'dart:html';
 import 'dart:js';
 
 import 'package:reactor/reactor.dart';
-import 'package:micro_sdk/micro_sdk.dart' as MicroSdk;
 import 'package:shared_events/shared_events.dart';
 
+import 'micro.dart';
 part 'reactor_experience_app.reactor.g.dart';
 
 Factory<Props> ReactorExperienceApp = _ReactorExperienceApp;
@@ -14,7 +14,6 @@ class ReactorExperienceAppStateInterface {
 }
 
 class ReactorExperienceAppState extends State implements ReactorExperienceAppStateInterface {}
-
 
 @ReactorComponent()
 class ReactorExperienceAppComponent extends Component<Props, ReactorExperienceAppState>  {
@@ -30,10 +29,10 @@ class ReactorExperienceAppComponent extends Component<Props, ReactorExperienceAp
       Dom.p()('Counter: ' + state.counter.toString()),
       Dom.div()(
         (Dom.button()
-          ..onClick = (event) => setState(ReactorExperienceAppState()..counter = ++state.counter)
+          ..onClick = allowInterop((event) => setState(ReactorExperienceAppState()..counter = ++state.counter))
         )('Increment'),
         (Dom.button()
-          ..onClick = (event) => setState(ReactorExperienceAppState()..counter = --state.counter)
+          ..onClick = allowInterop((event) => setState(ReactorExperienceAppState()..counter = --state.counter))
         )('Decrement')
       ),
       (Dom.label()
@@ -53,8 +52,7 @@ class ReactorExperienceAppComponent extends Component<Props, ReactorExperienceAp
           'margin': '0 .2rem'
         }
         ..onClick = (e) {
-          MicroSdk.dispatch(ShellPostMessageEvent(_postMessageInput.value));
-          return false;
+          micro.dispatch(ShellPostMessageEvent(_postMessageInput.value));
         }
       )('Post Message')
     );

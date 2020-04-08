@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:convert';
+import 'dart:js';
 import 'package:http/http.dart' as http;
 import 'package:recase/recase.dart';
 import 'package:micro_sdk/src/micro_element.dart';
@@ -22,25 +23,30 @@ class MicroRegionUpdateEvent extends MicroSdkEvent {
   String get regionName => detail['region_name'];
   Element get newContent => detail['new_content'];
 
-  MicroRegionUpdateEvent({region, regionName, newContent}):super(module: 'microsdk', type: 'micro_region_update_event', detail: {'region': region, 'region_name': regionName, 'new_content':newContent});
+  MicroRegionUpdateEvent({region, regionName, newContent}):super(type: 'microsdk:micro_region_update_event', detail: {'region': region, 'region_name': regionName, 'new_content':newContent});
 }
 
 class MicroRegion {
   MicroRegion(this.name, { this.root }) {
     if (root == null) {
-      defineMicroElement(tag, (e) => (root = e));
+      defineMicroElement(tag, (r) {
+        this.root = r;
+        root.addEventListener(MicroRegionUpdateEvent(regionName: name).type, allowInterop(_eventHandler));
+      });
     }
-    listen(MicroRegionUpdateEvent(), updateRegion);
   }
 
   final String name;
   ShadowRoot root;
   String get tag => 'micro-' + name.paramCase;
 
-  updateRegion(MicroRegionUpdateEvent event) {
-    if (name == (event.region != null ? event.region.name : event.regionName)) {
-      root.children.clear();
-      root.append(event.newContent);
-    }
+  _eventHandler(Event event) {
+    MicroRegionUpdateEvent _event = MicroRegionUpdateEvent(regionName: name).from(event);
+    updateRegion(_event.newContent);
+  }
+
+  updateRegion(newContent) {
+    root.children.clear();
+    root.append(newContent);
   }
 }

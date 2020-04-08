@@ -6,28 +6,70 @@ import 'dart:js_util';
 
 import 'package:js/js.dart';
 
-createJsCustomEvent(String type, { Map detail, bool bubbles: true, bool cancelable: true, bool composed: true }) {
-    Map details = detail ?? {};
-    var options = CustomEventInit(
-      detail: jsify(details),
+createJsCustomEvent(String type, { Map detail = const {}, bool bubbles = true, bool cancelable = true, bool composed = true }) {
+    var options = _CustomEventInit(
+      detail: jsify(detail),
       bubbles: bubbles,
       cancelable: cancelable,
       composed: composed
     );
-    return JsCustomEvent(type, options);
+    return _JsCustomEvent(type, options);
 }
 
 @JS('CustomEvent')
-class JsCustomEvent {
+class _JsCustomEvent implements CustomEvent, Event {
   external get detail;
   external set detail(v);
-  external JsCustomEvent(String type, CustomEventInit options);
+
+  external get matchingTarget;
+  external set matchingTarget(v);
+
+  external get path;
+  external set path(v);
+
+  external get bubbles;
+  external set bubbles(v);
+
+  external get cancelable;
+  external set cancelable(v);
+
+  external get composed;
+  external set composed(v);
+
+  external get currentTarget;
+  external set currentTarget(v);
+
+
+  external get defaultPrevented;
+  external set defaultPrevented(v);
+
+  external get eventPhase;
+  external set eventPhase(v);
+
+  external get isTrusted;
+  external set isTrusted(v);
+
+  external get target;
+  external set target(v);
+
+  external get type;
+  external set type(v);
+
+  external get timeStamp;
+  external set timeStamp(v);
+
+  external preventDefault();
+  external stopImmediatePropagation();
+  external composedPath();
+  external stopPropagation();
+
+  external _JsCustomEvent(String type, _CustomEventInit options);
 }
 
 @JS()
 @anonymous
-class CustomEventInit {
-  external factory CustomEventInit({
+class _CustomEventInit {
+  external factory _CustomEventInit({
     dynamic detail,
     bool bubbles,
     bool cancelable,
@@ -35,17 +77,25 @@ class CustomEventInit {
   });
 }
 
-class MicroSdkEvent implements CustomEvent, Event {
-  CustomEvent jsEvent;
+class MicroSdkEvent implements Event {
+  MicroSdkEvent({String via = '', String type, Map<dynamic,dynamic> detail = const {}}) {
+    Map<dynamic, dynamic> details = {
+      'via': '$via',
+      ...(detail ?? {})
+    };
+    this.jsEvent = createJsCustomEvent('$type', detail: details);
+  }
 
-  get detail => jsEvent.detail['payload'];
-  get via => jsEvent.detail['via'];
-
-  MicroSdkEvent from(event) {
+  MicroSdkEvent from(dynamic event) {
     this.jsEvent = event;
-    window.console.log(event);
     return this;
   }
+
+  CustomEvent jsEvent;
+
+  get detail => jsEvent.detail ?? {};
+
+  String get via => jsEvent.detail['via'];
 
   /**
    * A pointer to the element whose CSS selector matched within which an event
@@ -55,10 +105,6 @@ class MicroSdkEvent implements CustomEvent, Event {
   Element get matchingTarget => jsEvent.matchingTarget;
 
   List<EventTarget> get path => jsEvent.composedPath != null ? composedPath() : [];
-
-  MicroSdkEvent({type, module, detail = const {}}) {
-    this.jsEvent = createJsCustomEvent(eventType(module, type), detail: {'payload': detail, 'via': moduleName});
-  }
 
   @override
   bool get bubbles => jsEvent.bubbles;
@@ -101,27 +147,4 @@ class MicroSdkEvent implements CustomEvent, Event {
 
   @override
   String get type => jsEvent.type;
-}
-
-eventType(module, type) => (module != null ? module + ':' : '') + type;
-
-var _moduleName;
-String get moduleName => _moduleName;
-setModule(String name) {
-//print(StackTrace.current);
-  _moduleName = name;
-  print('set moduleName to $name');
-}
-
-dispatch(MicroSdkEvent event, {target}) {
-
-  (target ?? window).dispatchEvent(event.jsEvent);
-}
-
-listen(MicroSdkEvent event, Function handler, {target}) {
-  (target ?? window).addEventListener(event.type, allowInterop((_event) => handler(event.from(_event))));
-}
-
-ignore(MicroSdkEvent event, Function handler, {target}) {
-  (target ?? window).removeEventListener(event.type, allowInterop((_event) => handler(event.from(_event))));
 }

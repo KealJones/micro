@@ -3,7 +3,7 @@
 This repo brings multiple other repos into a single easy to run local microfrontends experience.
 
 ## Getting Started
-From the root of this repo run `pub get` then to run the entire example run `dart ./run.dart`.
+From the root of this repo run `pub get` then to run the entire example run `dart run.dart`.
 
 ### What does `run.dart` do?
 1. Runs watchers that build js bundles of each experience and outputs them into the `example/cdn` directory
